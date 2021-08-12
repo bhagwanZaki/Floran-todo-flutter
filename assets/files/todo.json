@@ -1,0 +1,220 @@
+{
+    "todos":[
+        {
+            "id": 1,
+            "title": "Design 2 Design",
+            "date_created": "2021-06-24",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-27",
+            "owner": 2
+        },
+        {
+            "id": 6,
+            "title": "test beautica rest api",
+            "date_created": "2021-06-25",
+            "completed": true,
+            "date_completed_by": "2021-06-26",
+            "completed_at": "2021-07-17",
+            "owner": 2
+        },
+        {
+            "id": 7,
+            "title": "Test the floran classroom code",
+            "date_created": "2021-06-26",
+            "completed": true,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-26",
+            "owner": 2
+        },
+        {
+            "id": 8,
+            "title": "Learn Flutter",
+            "date_created": "2021-06-27",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-25",
+            "owner": 2
+        },
+        {
+            "id": 11,
+            "title": "Design Beautica",
+            "date_created": "2021-06-28",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-28",
+            "owner": 2
+        },
+        {
+            "id": 12,
+            "title": "YouTube videos",
+            "date_created": "2021-06-28",
+            "completed": true,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-07-17",
+            "owner": 2
+        },
+        {
+            "id": 1,
+            "title": "Design 2 Design",
+            "date_created": "2021-06-24",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-27",
+            "owner": 2
+        },
+        {
+            "id": 6,
+            "title": "test beautica rest api",
+            "date_created": "2021-06-25",
+            "completed": true,
+            "date_completed_by": "2021-06-26",
+            "completed_at": "2021-07-17",
+            "owner": 2
+        },
+        {
+            "id": 7,
+            "title": "Test the floran classroom code",
+            "date_created": "2021-06-26",
+            "completed": true,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-26",
+            "owner": 2
+        },
+        {
+            "id": 8,
+            "title": "Learn Flutter",
+            "date_created": "2021-06-27",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-25",
+            "owner": 2
+        },
+        {
+            "id": 11,
+            "title": "Design Beautica",
+            "date_created": "2021-06-28",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-28",
+            "owner": 2
+        },
+        {
+            "id": 12,
+            "title": "YouTube videos",
+            "date_created": "2021-06-28",
+            "completed": true,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-07-17",
+            "owner": 2
+        },
+        {
+            "id": 1,
+            "title": "Design 2 Design",
+            "date_created": "2021-06-24",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-27",
+            "owner": 2
+        },
+        {
+            "id": 6,
+            "title": "test beautica rest api",
+            "date_created": "2021-06-25",
+            "completed": true,
+            "date_completed_by": "2021-06-26",
+            "completed_at": "2021-07-17",
+            "owner": 2
+        },
+        {
+            "id": 7,
+            "title": "Test the floran classroom code",
+            "date_created": "2021-06-26",
+            "completed": true,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-26",
+            "owner": 2
+        },
+        {
+            "id": 8,
+            "title": "Learn Flutter",
+            "date_created": "2021-06-27",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-25",
+            "owner": 2
+        },
+        {
+            "id": 11,
+            "title": "Design Beautica",
+            "date_created": "2021-06-28",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-28",
+            "owner": 2
+        },
+        {
+            "id": 12,
+            "title": "YouTube videos",
+            "date_created": "2021-06-28",
+            "completed": true,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-07-17",
+            "owner": 2
+        },
+        {
+            "id": 1,
+            "title": "Design 2 Design",
+            "date_created": "2021-06-24",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-27",
+            "owner": 2
+        },
+        {
+            "id": 6,
+            "title": "test beautica rest api",
+            "date_created": "2021-06-25",
+            "completed": true,
+            "date_completed_by": "2021-06-26",
+            "completed_at": "2021-07-17",
+            "owner": 2
+        },
+        {
+            "id": 7,
+            "title": "Test the floran classroom code",
+            "date_created": "2021-06-26",
+            "completed": true,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-26",
+            "owner": 2
+        },
+        {
+            "id": 8,
+            "title": "Learn Flutter",
+            "date_created": "2021-06-27",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-25",
+            "owner": 2
+        },
+        {
+            "id": 11,
+            "title": "Design Beautica",
+            "date_created": "2021-06-28",
+            "completed": false,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-06-28",
+            "owner": 2
+        },
+        {
+            "id": 12,
+            "title": "YouTube videos",
+            "date_created": "2021-06-28",
+            "completed": true,
+            "date_completed_by": "2021-06-30",
+            "completed_at": "2021-07-17",
+            "owner": 2
+        }
+    ]
+}
