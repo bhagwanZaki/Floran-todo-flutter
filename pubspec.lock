@@ -90,15 +90,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_session:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: master
-      resolved-ref: "430e2cd86d26818f7babf264f2631f917dae5b8f"
-      url: "https://github.com/RomanIvn/flutter_session.git"
-    source: git
-    version: "0.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

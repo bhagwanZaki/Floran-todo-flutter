@@ -9,6 +9,7 @@ import 'package:floran_todo/widgets/home_widget/TodoList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,6 +27,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  refresh() {
+    print('refreshing homepage');
+    setState(() {});
+  }
+
+
   final url = "http://192.168.2.101:8000/api/";
   var dataloaded = 0;
   loaddata() async {
@@ -34,8 +41,14 @@ class _HomePageState extends State<HomePage> {
     // var tododata = await rootBundle.loadString("assets/files/todo.json");
 
     // loading data from api
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('Token');
 
-    var response = await http.get(Uri.parse(url + 'test/'));
+    var response = await http.get(Uri.parse(url + 'todos/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Token $token'
+        });
     final tododata = response.body;
     print(response.statusCode);
 
@@ -50,7 +63,12 @@ class _HomePageState extends State<HomePage> {
     // var chartdata = await rootBundle.loadString("assets/files/chartdata.json");
 
     // loading chart data by api
-    var response2 = await http.get(Uri.parse(url + 'flutterchart'));
+    var id = prefs.getInt('id');
+    Map<String, String> qParams = {
+      'id': "$id",
+    };
+    var response2 = await http
+        .get(Uri.parse(url + 'flutterchart').replace(queryParameters: qParams));
     var chartdata = response2.body;
 
     final chartdecode = jsonDecode(chartdata);
@@ -64,6 +82,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date = DateTime.now();
+    print('Date $date');
     return Scaffold(
       backgroundColor: context.canvasColor,
       floatingActionButton: FloatingActionButton(
@@ -71,7 +91,7 @@ class _HomePageState extends State<HomePage> {
           showDialog(
               context: context,
               builder: (BuildContext context) {
-                return CreateTodoPage(context);
+                return CreateTodoPage(context,notifyParent: refresh);
               });
         },
         child: Icon(CupertinoIcons.plus),
@@ -89,7 +109,7 @@ class _HomePageState extends State<HomePage> {
               if (dataloaded != 1)
                 CircularProgressIndicator().centered().expand()
               else
-                TodoList().expand()
+                TodoList(notifyParent: refresh,).expand()
             ],
           ),
         ),
