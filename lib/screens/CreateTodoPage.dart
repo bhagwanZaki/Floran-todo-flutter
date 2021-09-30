@@ -27,7 +27,7 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
     super.initState();
   }
 
-  final url = "http://192.168.2.101:8000/api/todos/";
+  final url = "http://192.168.0.179:8000/api/todos/";
 
   submitForm(BuildContext context, String todo, DateTime date) async {
     if (_formKey.currentState!.validate()) {
@@ -41,13 +41,10 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
           },
           body: jsonEncode(
               <String, String>{'title': todo, 'date_completed_by': finaldate}));
-      print(response.body);
-      print(response.statusCode);
       var resdata = jsonDecode(response.body);
       if (response.statusCode == 201) {
         Navigator.of(context).pop();
         TodosModel.items.add(Todo.fromMap(resdata));
-        print(TodosModel.items);
         widget.notifyParent();
       }
     }
@@ -130,7 +127,6 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
         firstDate: DateTime(DateTime.now().year - 20),
         lastDate: DateTime(DateTime.now().year + 50));
     if (pickeddate != null) {
-      print(pickeddate);
       setState(() {
         date = pickeddate;
       });

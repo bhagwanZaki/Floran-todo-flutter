@@ -103,7 +103,6 @@ class _RegisterPageState extends State<RegisterPage> {
       onChanged: (value) {
         String name = '';
         name = value;
-        print(name);
       },
     );
   }
@@ -122,7 +121,6 @@ class _RegisterPageState extends State<RegisterPage> {
       onChanged: (value) {
         String name = '';
         name = value;
-        print(name);
       },
     );
   }

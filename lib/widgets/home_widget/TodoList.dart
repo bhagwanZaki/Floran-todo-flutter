@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:floran_todo/model/Chartdata.dart';
 import 'package:floran_todo/model/Todo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,6 @@ class _TodoListState extends State<TodoList> {
   }
 
   refresh() {
-    print('refreshing todolist');
     widget.notifyParent();
     setState(() {});
   }
@@ -55,7 +55,7 @@ class TodoItem extends StatefulWidget {
 }
 
 class _TodoItemState extends State<TodoItem> {
-  final url = "http://192.168.2.101:8000/api/todos/";
+  final url = "http://192.168.0.179:8000/api/todos/";
   @override
   void initState() {
     super.initState();
@@ -66,20 +66,31 @@ class _TodoItemState extends State<TodoItem> {
     var token = prefs.getString('Token');
     DateTime date = DateTime.now();
     var finaldate = "${date.year}-${date.month}-${date.day}";
-    print(finaldate);
     final res = await http.patch(Uri.parse(url + '$id/'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Token $token'
         },
         body: jsonEncode({'completed': complete, 'completed_at': finaldate}));
-
-    print(res.body);
-    print(res.statusCode);
+   
+    var dataReceived = jsonDecode(res.body);
+    var index = TodosModel.items
+        .indexWhere((element) => element.id == dataReceived['id']);
 
     if (res.statusCode == 200) {
-      print('refreshing item');
-
+      TodosModel.items[index] = Todo.fromMap(dataReceived);
+      if (TodosModel.items[index].completed == true) {
+        var chartdata = ChartDataList.items.last.data + 1;
+        var chartdate = ChartDataList.items.last.date;
+        ChartDataList.items.last =
+            ChartData.fromMap({'data': chartdata, 'date': chartdate});
+      } else {
+        var chartdata = ChartDataList.items.last.data - 1;
+        var chartdate = ChartDataList.items.last.date;
+        ChartDataList.items.last =
+            ChartData.fromMap({'data': chartdata, 'date': chartdate});
+      }
+    
       widget.notifyParent();
       setState(() {});
     }
@@ -87,7 +98,6 @@ class _TodoItemState extends State<TodoItem> {
 
   @override
   Widget build(BuildContext context) {
-    print("loading item ,,,,");
     return Container(
       // padding: new EdgeInsets.all(10.0),
       child: Card(
@@ -135,34 +145,5 @@ class _TodoItemState extends State<TodoItem> {
         ),
       ),
     );
-    // return VxBox(
-
-    //   child: Row(
-    //     children: [
-    //       Expanded(
-    //         child: Column(
-    //           children: [
-    //             todo.title.text.lg.color(context.theme.accentColor).make(),
-    //             todo.date_completed_by.text.caption(context).make()
-    //           ],
-    //         )
-    //       ),
-    //       ButtonBar(
-    //         alignment: MainAxisAlignment.end,
-    //         buttonPadding: EdgeInsets.all(1),
-    //         children: [
-    //           ElevatedButton(
-    //             child: "Complete".text.bold.xl.make(),
-    //             onPressed: (){},
-    //             style: ButtonStyle(
-    //               shape: MaterialStateProperty.all(StadiumBorder()),
-    //               backgroundColor: MaterialStateProperty.all(context.theme.buttonColor),
-    //             )
-    //           )
-    //         ],
-    //       )
-    //     ],
-    //   )
-    // ).color(context.cardColor).roundedLg.square(100).make().py12();
   }
 }

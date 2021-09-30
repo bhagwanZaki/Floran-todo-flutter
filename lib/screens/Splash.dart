@@ -24,19 +24,15 @@ class _SplashState extends State<Splash> {
     await Future.delayed(Duration(milliseconds: 1500), () {});
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('Token');
-    print(token);
     final response = await http.get(
-        Uri.parse("http://192.168.2.101:8000/api/auth/user"),
+        Uri.parse("http://192.168.0.179:8000/api/auth/user"),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Token $token'
         });
 
-    print(response.body);
     var data = json.decode(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
-      print(data['id']);
       await prefs.setInt('id', data['id']);
       await prefs.setString('username', data['username']);
       await prefs.setString('email', data['email']);

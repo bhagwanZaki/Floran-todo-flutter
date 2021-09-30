@@ -17,7 +17,7 @@ class _LoginpageState extends State<Loginpage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
-  final url = "http://192.168.2.101:8000/api/auth/";
+  final url = "http://192.168.0.179:8000/api/auth/";
 
   movetohome(BuildContext context, String username, String password) async {
     if (_formKey.currentState!.validate()) {
@@ -31,22 +31,14 @@ class _LoginpageState extends State<Loginpage> {
           'password': password,
         }),
       );
-      print(response.body);
       var data = json.decode(response.body);
-      print(data['token']);
       if (data['token'] != null) {
-        print('hello');
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('Token', data['token']);
-        print(data["user"]["id"]);
         await prefs.setInt('id', data["user"]['id']);
         await prefs.setString('username', data["user"]['username']);
         await prefs.setString('email', data["user"]['email']);
-        print(prefs.getString('Token'));
-
-      } else {
-        print('no hello');
-      }
+      } 
       Navigator.pushNamedAndRemoveUntil(
           context, MyRoutes.homeinRoute, (route) => false);
     }

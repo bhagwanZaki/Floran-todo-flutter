@@ -28,15 +28,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   refresh() {
-    print('refreshing homepage');
     setState(() {});
   }
 
-
-  final url = "http://192.168.2.101:8000/api/";
+  final url = "http://192.168.0.179:8000/api/";
   var dataloaded = 0;
   loaddata() async {
-    print("loading");
     // loading the todo data from json
     // var tododata = await rootBundle.loadString("assets/files/todo.json");
 
@@ -50,10 +47,8 @@ class _HomePageState extends State<HomePage> {
           'Authorization': 'Token $token'
         });
     final tododata = response.body;
-    print(response.statusCode);
 
     final decodedata = jsonDecode(tododata);
-    print(decodedata);
     // var todos = decodedata['todos'];
     var todos = decodedata;
     TodosModel.items =
@@ -77,13 +72,13 @@ class _HomePageState extends State<HomePage> {
         .map<ChartData>((item) => ChartData.fromMap(item))
         .toList();
     dataloaded = 1;
+
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     DateTime date = DateTime.now();
-    print('Date $date');
     return Scaffold(
       backgroundColor: context.canvasColor,
       floatingActionButton: FloatingActionButton(
@@ -91,7 +86,7 @@ class _HomePageState extends State<HomePage> {
           showDialog(
               context: context,
               builder: (BuildContext context) {
-                return CreateTodoPage(context,notifyParent: refresh);
+                return CreateTodoPage(context, notifyParent: refresh);
               });
         },
         child: Icon(CupertinoIcons.plus),
@@ -109,7 +104,9 @@ class _HomePageState extends State<HomePage> {
               if (dataloaded != 1)
                 CircularProgressIndicator().centered().expand()
               else
-                TodoList(notifyParent: refresh,).expand()
+                TodoList(
+                  notifyParent: refresh,
+                ).expand()
             ],
           ),
         ),

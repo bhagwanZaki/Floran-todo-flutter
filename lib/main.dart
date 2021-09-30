@@ -20,21 +20,17 @@ class MyApp extends StatelessWidget {
   isAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('Token');
-    print(token);
     final response = await http.get(
-        Uri.parse("http://192.168.2.101:8000/api/auth/user"),
+        Uri.parse("http://192.168.0.179:8000/api/auth/user"),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Token $token'
         });
 
-    print(response.body);
     var data = json.decode(response.body);
-    print(response.statusCode);
     bool isauth = false;
     if (response.statusCode == 200) {
       isauth = true;
-      print(data['id']);
       await prefs.setInt('id', data['id']);
       await prefs.setString('username', data['username']);
       await prefs.setString('email', data['email']);
@@ -45,7 +41,6 @@ class MyApp extends StatelessWidget {
       await prefs.setString('username', '');
       await prefs.setString('email', '');
     }
-    print('isauth : $isauth');
     return isauth;
   }
 
@@ -53,16 +48,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var auth = isAuth();
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: Mytheme.lightTheme(context),
-      darkTheme: Mytheme.darkTheme(context),
-      routes: {
-        MyRoutes.loginRoute: (context) => Loginpage(),
-        MyRoutes.homeinRoute: (context) => HomePage(),
-        MyRoutes.registerRoute: (context) => RegisterPage(),
-      },
-      home: Splash()
-    );
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.system,
+        theme: Mytheme.lightTheme(context),
+        darkTheme: Mytheme.darkTheme(context),
+        routes: {
+          MyRoutes.loginRoute: (context) => Loginpage(),
+          MyRoutes.homeinRoute: (context) => HomePage(),
+          MyRoutes.registerRoute: (context) => RegisterPage(),
+        },
+        home: Splash());
   }
 }
