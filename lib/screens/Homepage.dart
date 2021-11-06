@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:floran_todo/model/Chartdata.dart';
 import 'package:floran_todo/model/Todo.dart';
 import 'package:floran_todo/screens/CreateTodoPage.dart';
+import 'package:floran_todo/utils/Constants.dart';
 import 'package:floran_todo/widgets/Appbar.dart';
 import 'package:floran_todo/widgets/home_widget/Chart.dart';
 import 'package:floran_todo/widgets/home_widget/TodoList.dart';
@@ -31,17 +32,15 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  final url = "http://192.168.0.179:8000/api/";
   var dataloaded = 0;
   loaddata() async {
     // loading the todo data from json
-    // var tododata = await rootBundle.loadString("assets/files/todo.json");
 
     // loading data from api
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('Token');
 
-    var response = await http.get(Uri.parse(url + 'todos/'),
+    var response = await http.get(Uri.parse(Constants.baseUrl + 'todos/'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Token $token'
@@ -55,7 +54,6 @@ class _HomePageState extends State<HomePage> {
         List.from(todos).map<Todo>((item) => Todo.fromMap(item)).toList();
 
     // laoding chart data
-    // var chartdata = await rootBundle.loadString("assets/files/chartdata.json");
 
     // loading chart data by api
     var id = prefs.getInt('id');
@@ -63,7 +61,7 @@ class _HomePageState extends State<HomePage> {
       'id': "$id",
     };
     var response2 = await http
-        .get(Uri.parse(url + 'flutterchart').replace(queryParameters: qParams));
+        .get(Uri.parse(Constants.baseUrl + 'flutterchart').replace(queryParameters: qParams));
     var chartdata = response2.body;
 
     final chartdecode = jsonDecode(chartdata);

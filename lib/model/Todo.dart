@@ -2,7 +2,6 @@ import 'dart:convert';
 
 class TodosModel{
   static List<Todo> items = [];
-  
 }
 
 class Todo {
@@ -14,7 +13,7 @@ class Todo {
   // ignore: non_constant_identifier_names
   final String date_completed_by;
   // ignore: non_constant_identifier_names
-  final String completed_at;
+  final String? completed_at;
   Todo({
     required this.id,
     required this.title,

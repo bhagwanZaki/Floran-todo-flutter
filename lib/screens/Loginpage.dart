@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:floran_todo/utils/Constants.dart';
 import 'package:floran_todo/utils/MyRouts.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,30 +18,34 @@ class _LoginpageState extends State<Loginpage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
-  final url = "http://192.168.0.179:8000/api/auth/";
 
-  movetohome(BuildContext context, String username, String password) async {
+  login(BuildContext context, String username, String password) async {
     if (_formKey.currentState!.validate()) {
       // If the form is valid, display a snackbar. In the real world,
       // you'd often call a server or save the information in a database.
       final response = await http.post(
-        Uri.parse(url + 'login'),
+        Uri.parse(Constants.baseUrl + 'auth/login'),
         headers: <String, String>{'Content-Type': 'application/json'},
         body: jsonEncode(<String, String>{
           'username': username,
           'password': password,
         }),
       );
-      var data = json.decode(response.body);
-      if (data['token'] != null) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('Token', data['token']);
-        await prefs.setInt('id', data["user"]['id']);
-        await prefs.setString('username', data["user"]['username']);
-        await prefs.setString('email', data["user"]['email']);
-      } 
-      Navigator.pushNamedAndRemoveUntil(
-          context, MyRoutes.homeinRoute, (route) => false);
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        if (data['token'] != null) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('Token', data['token']);
+          await prefs.setInt('id', data["user"]['id']);
+          await prefs.setString('username', data["user"]['username']);
+          await prefs.setString('email', data["user"]['email']);
+        }
+        Navigator.pushNamedAndRemoveUntil(
+            context, MyRoutes.homeinRoute, (route) => false);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Username or password is not valid")));
+      }
     }
   }
 
@@ -82,7 +87,7 @@ class _LoginpageState extends State<Loginpage> {
                       borderRadius: BorderRadius.circular(8),
                       child: InkWell(
                         onTap: () =>
-                            movetohome(context, username.text, password.text),
+                            login(context, username.text, password.text),
                         child: AnimatedContainer(
                           duration: Duration(seconds: 1),
                           height: 50,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:floran_todo/model/Todo.dart';
+import 'package:floran_todo/utils/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -27,7 +28,7 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
     super.initState();
   }
 
-  final url = "http://192.168.0.179:8000/api/todos/";
+  final url = Constants.baseUrl+"todos/";
 
   submitForm(BuildContext context, String todo, DateTime date) async {
     if (_formKey.currentState!.validate()) {
@@ -41,11 +42,14 @@ class _CreateTodoPageState extends State<CreateTodoPage> {
           },
           body: jsonEncode(
               <String, String>{'title': todo, 'date_completed_by': finaldate}));
-      var resdata = jsonDecode(response.body);
       if (response.statusCode == 201) {
+        var resdata = jsonDecode(response.body);
         Navigator.of(context).pop();
         TodosModel.items.add(Todo.fromMap(resdata));
         widget.notifyParent();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Error Occur Please try again !")));
       }
     }
   }

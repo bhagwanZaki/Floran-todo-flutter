@@ -4,6 +4,7 @@ import 'package:floran_todo/screens/Homepage.dart';
 import 'package:floran_todo/screens/Loginpage.dart';
 import 'package:floran_todo/screens/RegisterPage.dart';
 import 'package:floran_todo/screens/Splash.dart';
+import 'package:floran_todo/utils/Constants.dart';
 import 'package:floran_todo/utils/MyRouts.dart';
 import 'package:floran_todo/widgets/Themes.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('Token');
     final response = await http.get(
-        Uri.parse("http://192.168.0.179:8000/api/auth/user"),
+        Uri.parse(Constants.baseUrl+"auth/user"),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Token $token'

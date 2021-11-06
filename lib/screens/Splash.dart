@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:floran_todo/utils/Constants.dart';
 import 'package:floran_todo/utils/MyRouts.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +26,7 @@ class _SplashState extends State<Splash> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('Token');
     final response = await http.get(
-        Uri.parse("http://192.168.0.179:8000/api/auth/user"),
+        Uri.parse(Constants.baseUrl+"auth/user"),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Token $token'

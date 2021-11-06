@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:floran_todo/utils/Constants.dart';
 import 'package:floran_todo/utils/MyRouts.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -11,15 +16,46 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
 
-  movetohome(BuildContext context) {
+  register(BuildContext context, String username, String email, String password,
+      String confirmpassword) async {
     if (_formKey.currentState!.validate()) {
-      // If the form is valid, display a snackbar. In the real world,
-      // you'd often call a server or save the information in a database.
-     Navigator.pushNamedAndRemoveUntil(
-          context, MyRoutes.homeinRoute, (route) => false);
+      final response =
+          await http.post(Uri.parse(Constants.baseUrl + "auth/register"),
+              headers: <String, String>{'Content-Type': 'application/json'},
+              body: jsonEncode(<String, String>{
+                'username': username,
+                'email': email,
+                'password': password,
+                'password2': confirmpassword
+              }));
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        if (data['token'] != null) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('Token', data['token']);
+          await prefs.setInt('id', data["user"]['id']);
+          await prefs.setString('username', data["user"]['username']);
+          await prefs.setString('email', data["user"]['email']);
+        }
+        Navigator.pushNamedAndRemoveUntil(
+            context, MyRoutes.homeinRoute, (route) => false);
+      } else {
+        var data = json.decode(response.body);
+
+        if (data.containsKey('username')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Username already exists")));
+        } else if (data.containsKey('email')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Email already exists")));
+        }
+      }
     }
   }
 
@@ -34,55 +70,59 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: context.theme.canvasColor,
       body: Container(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: SingleChildScrollView(
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(isDarkMode
-                        ? 'assets/images/logo_dark.png'
-                        : 'assets/images/logo.png'),
-                    SizedBox(height: 10),
-                    Text(
-                      "Register Page",
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    SizedBox(height: 10),
-                    usernameField(),
-                    SizedBox(height: 10),
-                    emailField(),
-                    SizedBox(height: 10),
-                    passwordField(),
-                    SizedBox(height: 10),
-                    password2Field(),
-                    SizedBox(height: 10),
-                    Material(
-                      color: context.theme.buttonColor,
-                      borderRadius: BorderRadius.circular(8),
-                      child: InkWell(
-                        onTap: () => movetohome(context),
-                        child: AnimatedContainer(
-                          duration: Duration(seconds: 1),
-                          height: 50,
-                          width: 150,
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Register",
-                            style: TextStyle(fontSize: 20, color: Colors.white),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: SingleChildScrollView(
+              child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(isDarkMode
+                          ? 'assets/images/logo_dark.png'
+                          : 'assets/images/logo.png'),
+                      SizedBox(height: 10),
+                      Text(
+                        "Register Page",
+                        style: TextStyle(fontSize: 30),
+                      ),
+                      SizedBox(height: 10),
+                      usernameField(),
+                      SizedBox(height: 10),
+                      emailField(),
+                      SizedBox(height: 10),
+                      passwordField(),
+                      SizedBox(height: 10),
+                      password2Field(),
+                      SizedBox(height: 10),
+                      Material(
+                        color: context.theme.buttonColor,
+                        borderRadius: BorderRadius.circular(8),
+                        child: InkWell(
+                          onTap: () => register(context, username.text,
+                              email.text, password.text, confirmpassword.text),
+                          child: AnimatedContainer(
+                            duration: Duration(seconds: 1),
+                            height: 50,
+                            width: 150,
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Register",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    InkWell(
-                      child: Text("Already have account"),
-                      onTap: () => movetologin(context),
-                    )
-                  ],
-                )),
+                      SizedBox(height: 10),
+                      InkWell(
+                        child: Text("Already have account"),
+                        onTap: () => movetologin(context),
+                      )
+                    ],
+                  )),
+            ),
           ),
         ),
       ),
@@ -91,11 +131,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget usernameField() {
     return TextFormField(
+      controller: username,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter username';
-        } 
-          return null;
+        }
+        return null;
       },
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
@@ -109,11 +150,15 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget emailField() {
     return TextFormField(
+      controller: email,
       validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter email';
-        } 
-          return null;
+        String pattern = r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$';
+
+        RegExp regex = new RegExp(pattern);
+        if (!regex.hasMatch(value!)) {
+          return 'Enter a valid email address';
+        }
+        return null;
       },
       keyboardType: TextInputType.emailAddress,
       decoration:
@@ -131,8 +176,8 @@ class _RegisterPageState extends State<RegisterPage> {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter password';
-        } 
-          return null;
+        }
+        return null;
       },
       keyboardType: TextInputType.name,
       obscureText: true,
@@ -146,12 +191,12 @@ class _RegisterPageState extends State<RegisterPage> {
       controller: confirmpassword,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter username';
-        } 
-        if(password.text!=confirmpassword.text){
+          return 'Please enter matching password';
+        }
+        if (password.text != confirmpassword.text) {
           return "Password does not match";
         }
-          return null;
+        return null;
       },
       keyboardType: TextInputType.name,
       obscureText: true,
